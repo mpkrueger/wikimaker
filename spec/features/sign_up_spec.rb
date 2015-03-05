@@ -3,6 +3,7 @@ require 'rails_helper'
 describe "Sign up flow" do
 
   describe "successful" do
+    
     it "takes a valid email address" do
       visit root_path
 
@@ -14,6 +15,8 @@ describe "Sign up flow" do
       expect(current_path).to eq user_registration_path
 
     end
+
+    
   end
   
 end
