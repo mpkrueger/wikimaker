@@ -25,6 +25,9 @@ describe "Sign up flow" do
       click_link 'Sign Up'
       fill_in 'Email', with: "matt@example.com"
       fill_in 'Password', with: "password"
+      click_button "Sign up"
+
+      expect.to receive(error)
     end
 
     it "returns an error if passwords don't match" do
