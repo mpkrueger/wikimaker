@@ -1,4 +1,24 @@
-<h1>Welcome to Wikimaker!</h1>
-<p>This is the homepage of Wikimaker.</p>
+<br/>
+<div class="jumbotron">
+  <h1>Wikimaker</h1>
+  <p>Wikimaker makes it easy to make wikis.</p>
+  <p>
+    <%= link_to "Sign In", new_user_session_path, class: 'btn btn-primary' %> or
+    <%= link_to "Sign Up", new_user_registration_path, class: 'btn btn-primary' %> today!
+  </p>
+</div>
 
-<%= link_to "Sign Up", new_user_registration_path %>
+<div class="row">
+  <div class="col-md-4">
+    <h2>Collaborate</h2>
+    <p>Wikimaker enables you to more easily collaborate with teammates.</p>
+  </div>
+  <div class="col-md-4">
+    <h2>Document Important Information</h2>
+    <p>Wikimaker helps you preserve information for review and reflection in the future.</p>
+  </div>
+  <div class="col-md-4">
+    <h2>Share Knowledge</h2>
+    <p>Wikimaker creates an easy way for you to share knowledge with others.</p>
+  </div>
+</div>
