@@ -2,10 +2,14 @@
 <div class="jumbotron">
   <h1>Wikimaker</h1>
   <p>Wikimaker makes it easy to make wikis.</p>
-  <p>
-    <%= link_to "Sign In", new_user_session_path, class: 'btn btn-primary' %> or
-    <%= link_to "Sign Up", new_user_registration_path, class: 'btn btn-primary' %> today!
-  </p>
+  <% if current_user %>
+    <p>Welcome</p>
+  <% else %>
+    <p>
+      <%= link_to "Sign In", new_user_session_path, class: 'btn btn-primary' %> or
+      <%= link_to "Sign Up", new_user_registration_path, class: 'btn btn-primary' %> today!
+    </p>
+  <% end %>
 </div>
 
 <div class="row">
