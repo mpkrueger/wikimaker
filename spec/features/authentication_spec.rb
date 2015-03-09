@@ -2,12 +2,12 @@ require 'rails_helper'
 
 feature "authentication" do
     
-  
-
     scenario "user signs up" do
       visit root_path
 
-      click_link 'Sign Up'
+      within ".user-info" do
+        click_link 'Sign Up'
+      end
       fill_in 'Email', with: "matt@example.com"
       fill_in 'Password', with: "password"
       click_button "Sign up"
@@ -17,15 +17,17 @@ feature "authentication" do
     end
 
     scenario "user signs in" do
-      user = authenticated_user
+      user = TestFactories.authenticated_user email: "matt@example.com"
 
       visit root_path
-      click_link 'Sign In'
+      within ".user-info" do
+        click_link 'Sign In'
+      end
       fill_in 'Email', with: "matt@example.com"
       fill_in 'Password', with: "password"
       click_button "Sign in"
 
-      expect( page ).to have_content("Welcome, Matt")
+      expect( page ).to have_content("Hello Matt")
     end
 
   
