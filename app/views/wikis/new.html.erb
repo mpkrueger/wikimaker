@@ -7,5 +7,11 @@
   <%= f.label :body %>
   <%= f.text_field :body %>
 
+  <% if current_user.admin? || current_user.premium? %>
+    <%= f.label :private, class: 'checkbox' do %>
+      <%= f.check_box :private %> Private wiki
+    <% end %>
+  <% end %>
+
   <%= f.submit "Save" %>
 <% end %>

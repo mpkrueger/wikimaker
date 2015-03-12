@@ -6,9 +6,11 @@ describe "wikis" do
   Warden.test_mode!
 
   before do
-    @user = TestFactories.authenticated_user
-    @wiki = TestFactories.associated_wiki
-    login_as(@user, :scope => :user)
+    @admin = TestFactories.authenticated_admin
+    @standard = TestFactories.authenticated_standard
+    @premium = TestFactories.authenticated_premium
+    @public_wiki = TestFactories.associated_wiki
+    @private_wiki = TestFactories.associated_wiki private: true
   end
 
   after do
@@ -17,18 +19,39 @@ describe "wikis" do
 
   feature "index" do
 
-    scenario "user sees all of the public wikis" do
-
+    scenario "admin sees all of the public wikis" do
+      login_as(@admin, :scope => :user)
       visit wikis_path
-      expect( page ).to have_content(@wiki.title)
+      expect( page ).to have_content(@public_wiki.title)
 
+    end
+
+    scenario "standard user sees all of the public wikis" do
+      login_as(@standard, :scope => :user)
+      visit wikis_path
+      expect( page ).to have_content(@public_wiki.title)
+    end
+
+    scenario "standard user shouldn't see private wikis" do
+      login_as(@standard, :scope => :user)
+      visit wikis_path
+      expect( page ).to_not have_content(@private_wiki.title)
     end
 
   end
 
+  feature "show" do
+    scenario "standard user shouldn't see private wiki" do
+      login_as(@standard, :scope => :user)
+      visit wiki_path(@private_wiki.id)
+      expect( page ).to have_content("You're not authorized")
+    end
+  end
+
   feature "new" do
 
-    scenario "user creates a new wiki" do
+    scenario "admin creates a new public wiki" do
+      login_as(@admin, :scope => :user)
       visit new_wiki_path
 
       fill_in 'Title', with: 'Wiki title'
@@ -41,12 +64,64 @@ describe "wikis" do
       }
     end
 
+    scenario "standard user creates a new public wiki" do
+      login_as(@standard, :scope => :user)
+      visit new_wiki_path
+
+      fill_in 'Title', with: 'Wiki title'
+      fill_in 'Body', with: 'This wiki is awesome.'
+      click_button "Save"
+
+      expect{
+        (current_path).to eq wikis_path
+        (Wiki.count).to change by 1
+      }
+    end
+
+    scenario "premium user creates a new public wiki" do
+      login_as(@premium, :scope => :user)
+      visit new_wiki_path
+
+      fill_in 'Title', with: 'Wiki title'
+      fill_in 'Body', with: 'This wiki is awesome.'
+      click_button "Save"
+
+      expect{
+        (current_path).to eq wikis_path
+        (Wiki.count).to change by 1
+      }
+    end
+
+    scenario "premium user creates a new private wiki" do
+      login_as(@premium, :scope => :user)
+      visit new_wiki_path
+
+      fill_in 'Title', with: 'Wiki title'
+      fill_in 'Body', with: 'This wiki is awesome.'
+      check "Private"
+      click_button "Save"
+
+      expect{
+        (current_path).to eq wikis_path
+        (Wiki.last.private == true)
+        (Wiki.count).to change by 1
+      }
+    end
+
+    scenario "standard user shouldn't be able to create a new private wiki" do
+      login_as(@standard, :scope => :user)
+      visit new_wiki_path
+
+      expect( page ).to_not have_content("Private wiki")
+    end
+
   end
 
   feature "edit" do
 
     scenario "user edits an existing wiki" do
-      visit wiki_path(@wiki.id)
+      login_as(@admin, :scope => :user)
+      visit wiki_path(@public_wiki.id)
 
       click_link "Edit Wiki"
       fill_in 'Title', with: 'New Title'
@@ -60,7 +135,8 @@ describe "wikis" do
   feature "delete" do
 
     scenario "user delets an existing wiki" do
-      visit wiki_path(@wiki.id)
+      login_as(@admin, :scope => :user)
+      visit wiki_path(@public_wiki.id)
 
       click_link "Delete Wiki"
 

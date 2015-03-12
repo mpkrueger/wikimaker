@@ -17,7 +17,7 @@ feature "authentication" do
     end
 
     scenario "user signs in" do
-      user = TestFactories.authenticated_user email: "matt@example.com"
+      user = TestFactories.authenticated_admin email: "matt@example.com"
 
       visit root_path
       within ".user-info" do

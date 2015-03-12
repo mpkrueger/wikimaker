@@ -10,6 +10,10 @@ class User < ActiveRecord::Base
     role == 'admin'
   end
 
+  def standard?
+    role == 'standard'
+  end
+
   def premium?
     role == 'premium'
   end
