@@ -1,5 +1,15 @@
 require 'rails_helper'
 
-RSpec.describe User, :type => :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+describe "initialization" do
+  it "creates a user with default role standard" do
+    user = User.new(
+      name: "Matt", 
+      email: "matt@example.com",
+      password: "password"
+    )
+    user.skip_confirmation!
+    user.save
+
+    expect(user.role).to eq "standard"
+  end
 end
