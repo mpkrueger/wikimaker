@@ -64,6 +64,22 @@ describe "wikis" do
       }
     end
 
+    scenario "admin creates a new private wiki" do
+      login_as(@admin, :scope => :user)
+      visit new_wiki_path
+
+      fill_in 'Title', with: 'Wiki title'
+      fill_in 'Body', with: 'This wiki is awesome.'
+      check "Private"
+      click_button "Save"
+
+      expect{
+        (current_path).to eq wikis_path
+        (Wiki.last.private == true)
+        (Wiki.count).to change by 1
+      }
+    end
+
     scenario "standard user creates a new public wiki" do
       login_as(@standard, :scope => :user)
       visit new_wiki_path
