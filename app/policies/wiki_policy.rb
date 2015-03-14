@@ -8,7 +8,9 @@ class WikiPolicy < ApplicationPolicy
     end
 
     def resolve
-      if user.admin? || user.premium?
+      if user.admin?
+        scope.all
+      elsif user.premium?
         scope.all
       else
         scope.where(:private => false)
@@ -17,8 +19,10 @@ class WikiPolicy < ApplicationPolicy
   end
 
   def show?
-    if user.admin? || user.premium?
+    if user.admin?
       true
+    elsif user.premium?
+      record.public? || record.user == user
     else
       record.public?
     end

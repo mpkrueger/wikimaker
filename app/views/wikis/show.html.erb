@@ -3,4 +3,6 @@
 <%= @wiki.body %>
 
 <p><%= link_to "Edit Wiki", edit_wiki_path(@wiki.id) %></p>
-<p><%= link_to "Delete Wiki", wiki_path(@wiki.id), method: :delete %></p>
+<% if policy(@wiki).destroy? %>
+  <p><%= link_to "Delete Wiki", wiki_path(@wiki.id), method: :delete %></p>
+<% end %>
