@@ -52,13 +52,13 @@ describe "wikis" do
       expect( page ).to have_content(@premium_wiki.title)
     end
 
-    # scenario "premium user shouldn't see other people's private wikis" do
-    #   @other_private_wiki = TestFactories.associated_wiki private: true
+    xscenario "premium user shouldn't see other people's private wikis" do
+      @other_private_wiki = TestFactories.associated_wiki private: true
 
-    #   login_as(@premium, :scope => :user)
-    #   visit wikis_path
-    #   expect( page ).to_not have_content(@other_private_wiki.title)
-    # end
+      login_as(@premium, :scope => :user)
+      visit wikis_path
+      expect( page ).to_not have_content(@other_private_wiki.title)
+    end
 
   end
 
