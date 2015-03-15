@@ -30,5 +30,22 @@ feature "authentication" do
       expect( page ).to have_content("Hello Matt")
     end
 
+    scenario "user signs out" do
+      user = TestFactories.authenticated_admin email: "matt@example.com"
+
+      visit root_path
+      within ".user-info" do
+        click_link 'Sign In'
+      end
+      fill_in 'Email', with: "matt@example.com"
+      fill_in 'Password', with: "password"
+      click_button "Sign in"
+
+      within ".user-info" do
+        click_link 'Sign Out'
+      end
+
+      expect( page ).to_not have_content("Hello Matt")
+    end
   
 end
