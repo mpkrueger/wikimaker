@@ -1,6 +1,6 @@
-<h1><%= @wiki.title %></h1>
+<h1><%= markdown_to_html @wiki.title %></h1>
 
-<%= @wiki.body %>
+<%= markdown_to_html @wiki.body %>
 
 <p><%= link_to "Edit Wiki", edit_wiki_path(@wiki.id) %></p>
 <% if policy(@wiki).destroy? %>
