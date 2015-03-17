@@ -3,7 +3,7 @@ class ChargesController < ApplicationController
     @stripe_btn_data = {
       key: "#{ Rails.configuration.stripe[:publishable_key] }",
       description: "WikiMaker Premium - #{current_user.name}",
-      amount: 1000
+      amount: Amount.default
     }
   end
 
@@ -14,19 +14,26 @@ class ChargesController < ApplicationController
     )
 
     charge = Stripe::Charge.create(
-      customer: customer.id,
-      amount: 1000,
-      description: "WikiMaker Premium - #{current_user.email}",
-      currency: 'usd'
+  #     customer: customer.id,
+  #     amount: Amount.default,
+  #     description: "WikiMaker Premium - #{current_user.email}",
+  #     currency: 'usd'
     )
+  #   if charge.status == "succeeded"
+  #     current_user.role = "premium"
+  #     current_user.save!
+  #   end
 
-    flash[:success] = "Thanks for your payment, #{current_user.name}!"
+  #   flash[:success] = "Thanks for your payment, #{current_user.name}!"
     
-    redirect_to root_path
+  #   redirect_to root_path
 
-  rescue Stripe::CardError => e
-    flash[:error] = e.message
-    redirect_to new_charge_path
+  head :ok
+
+  #   # not sure why this works... rescue - doesn't need an 'end'?
+  # rescue Stripe::CardError => e
+  #   flash[:error] = e.message
+  #   redirect_to new_charge_path
 
   end
 
