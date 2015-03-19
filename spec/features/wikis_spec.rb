@@ -52,7 +52,7 @@ describe "wikis" do
       expect( page ).to have_content(@premium_wiki.title)
     end
 
-    xscenario "premium user shouldn't see other people's private wikis" do
+    scenario "premium user shouldn't see other people's private wikis" do
       @other_private_wiki = TestFactories.associated_wiki private: true
 
       login_as(@premium, :scope => :user)
@@ -222,6 +222,14 @@ describe "wikis" do
       click_button "Save"
 
       expect( page ).to have_content("New Title")
+    end
+
+    scenario "premium user can add collaborators to their private wiki" do
+      @premium_wiki = TestFactories.associated_wiki private: true, user: @premium
+      login_as(@premium, :scope => :user)
+      visit edit_wiki_path(@premium_wiki.id)
+
+      click_link "Add Collaborators"
     end
 
   end

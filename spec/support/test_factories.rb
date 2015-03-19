@@ -8,7 +8,7 @@ module TestFactories
     }.merge(options)
     user = User.new(user_options)
     user.skip_confirmation!
-    user.save
+    user.save!
     user
   end
 
@@ -21,7 +21,7 @@ module TestFactories
     }.merge(options)
     user = User.new(user_options)
     user.skip_confirmation!
-    user.save
+    user.save!
     user
   end
 
@@ -34,7 +34,7 @@ module TestFactories
     }.merge(options)
     user = User.new(user_options)
     user.skip_confirmation!
-    user.save
+    user.save!
     user
   end    
 
