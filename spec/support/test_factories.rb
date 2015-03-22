@@ -15,7 +15,7 @@ module TestFactories
   def self.authenticated_standard(options={})
     user_options = { 
       name: "Jessica", 
-      email: "email#{rand}@example.com", 
+      email: "jessica@example.com", 
       password: "password", 
       role: "standard" 
     }.merge(options)

@@ -224,12 +224,33 @@ describe "wikis" do
       expect( page ).to have_content("New Title")
     end
 
-    scenario "premium user can add collaborators to their private wiki" do
+    scenario "premium user can add exiting user as collaborator to their private wiki" do
       @premium_wiki = TestFactories.associated_wiki private: true, user: @premium
       login_as(@premium, :scope => :user)
       visit edit_wiki_path(@premium_wiki.id)
 
-      click_link "Add Collaborators"
+      fill_in 'Collaborators', with: 'jessica@example.com'
+      click_button "Save"
+
+      expect{
+        (current_path).to eq wiki_path(@premium_wiki.id)
+        (@premium_wiki.users.count).to change by -1
+      }
+
+    end
+
+    scenario "premium user sees an error when trying to add unknown email as collaborator to their private wiki" do
+      @premium_wiki = TestFactories.associated_wiki private: true, user: @premium
+      login_as(@premium, :scope => :user)
+      visit edit_wiki_path(@premium_wiki.id)
+
+      fill_in 'Collaborators', with: 'not_a_user@example.com'
+      click_button "Save"
+
+      expect{
+        (current_path).to eq wiki_path(@premium_wiki.id)
+        (@premium_wiki.users.count).to_not change by 1
+      }      
     end
 
   end
