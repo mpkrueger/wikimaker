@@ -229,28 +229,26 @@ describe "wikis" do
       login_as(@premium, :scope => :user)
       visit edit_wiki_path(@premium_wiki.id)
 
-      fill_in 'Collaborators', with: 'jessica@example.com'
-      click_button "Save"
+      within "#user_#{@standard.id}" do
+        click_link "Invite"
+      end
 
-      expect{
-        (current_path).to eq wiki_path(@premium_wiki.id)
-        (@premium_wiki.users.count).to change by -1
-      }
-
+      visit wiki_path(@premium_wiki.id)
+      expect(page).to have_content(@standard.name)
     end
 
-    scenario "premium user sees an error when trying to add unknown email as collaborator to their private wiki" do
+    scenario "premium user can remove a collaborator from their private wiki" do
       @premium_wiki = TestFactories.associated_wiki private: true, user: @premium
+      @premium_wiki.collaborators.create!(user: @standard)
       login_as(@premium, :scope => :user)
       visit edit_wiki_path(@premium_wiki.id)
 
-      fill_in 'Collaborators', with: 'not_a_user@example.com'
-      click_button "Save"
+      within "#user_#{@standard.id}" do
+        click_link "Remove"
+      end
 
-      expect{
-        (current_path).to eq wiki_path(@premium_wiki.id)
-        (@premium_wiki.users.count).to_not change by 1
-      }      
+      visit wiki_path(@premium_wiki.id)
+      expect(page).to_not have_content(@standard.name)
     end
 
   end

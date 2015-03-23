@@ -1,4 +1,9 @@
 <h1>Wikis</h1>
-<% @wikis.each do |wiki| %>
-  <p><%= link_to wiki.title, wiki_path(wiki.id) %></p>
-<% end %>
+<table>
+  <% @wikis.each do |wiki| %>
+    <tr>
+      <td><%= link_to wiki.title, wiki_path(wiki.id) %></td>
+      <td><%= wiki.user.name %></td>
+    </tr>
+  <% end %>
+</table>

@@ -6,3 +6,10 @@
 <% if policy(@wiki).destroy? %>
   <p><%= link_to "Delete Wiki", wiki_path(@wiki.id), method: :delete %></p>
 <% end %>
+
+<h3>Collaborators</h3>
+<p>
+  <% @wiki.users.each do |user| %>
+    <p><%= user.name %></p>
+  <% end %>
+</p>

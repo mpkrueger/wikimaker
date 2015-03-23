@@ -7,8 +7,30 @@
   <%= f.label :body %>
   <%= f.text_field :body %>
 
-  <%= f.label :collaborators %>
-  <%= f.text_field :collaborators %>
-
   <%= f.submit "Save" %>
+<% end %>
+
+<% if policy(@wiki).update? %>
+  <div class="collaborators">
+    <h1> Collaborators</h1>
+    <table>
+      <tr>
+        <th> Name</th>
+        <th> Invite to Collaborate</th>
+      </tr>
+      <% @users.each do |user| %>
+        <% if not_a_collaborator?(user) %>
+          <tr id="<%= dom_id(user) %>">
+            <td> <%= user.name %> </td>
+            <td> <%= link_to 'Invite', wiki_collaborators_path(@wiki.id, :user => user), method: :post, class: 'btn' %></td>
+          </tr>
+        <% elsif @wiki.users.include?(user) %>
+          <tr id="<%= dom_id(user) %>">
+            <td> <%= user.name %> </td>
+            <td> <%= link_to 'Remove', wiki_collaborator_path(@wiki.id, @collaborators.where(user_id: user.id, wiki_id: @wiki.id).pluck(:id)), method: :delete, class: 'btn' %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </table>
+  </div>
 <% end %>

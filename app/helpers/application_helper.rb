@@ -5,4 +5,8 @@ module ApplicationHelper
     redcarpet = Redcarpet::Markdown.new(renderer, extensions)
     (redcarpet.render markdown).html_safe
   end
+
+  def not_a_collaborator?(user)
+    !@wiki.users.include?(user) && user != @wiki.user
+  end
 end
