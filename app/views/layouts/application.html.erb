@@ -15,7 +15,7 @@
       <li><%= link_to "About", about_path %></li>
       <li><%= link_to "Wikis", wikis_path %></li>
       <li><%= link_to "Create a New Wiki", new_wiki_path %></li>
-      <% if current_user.role == 'standard' %>
+      <% if current_user && current_user.role == 'standard' %>
         <li><%= link_to "Upgrade", new_charge_path %></li>
       <% end %>
 
